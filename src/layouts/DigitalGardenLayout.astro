@@ -1,0 +1,206 @@
+---
+import '../styles/global.css';
+import Header from '../components/Layout/Header';
+import Footer from '../components/Layout/Footer';
+import LeftSidebar from '../components/Sidebar/LeftSidebar';
+import RightPanel from '../components/RightPanel/RightPanel';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  // Right panel props
+  currentSlug?: string;
+  showBacklinks?: boolean;
+  showMiniGraph?: boolean;
+  showToc?: boolean;
+  headings?: { depth: number; text: string; slug: string }[];
+}
+
+const {
+  title,
+  description = 'AI-powered tech blog with knowledge graph',
+  image,
+  currentSlug,
+  showBacklinks = false,
+  showMiniGraph = false,
+  showToc = false,
+  headings = [],
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const showRightPanel = showBacklinks || showMiniGraph || showToc;
+---
+
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {image && <meta property="og:image" content={image} />}
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    {image && <meta property="twitter:image" content={image} />}
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/geist@1.2.0/dist/fonts/geist-sans/style.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/geist@1.2.0/dist/fonts/geist-mono/style.min.css"
+    />
+
+    <!-- Theme Script (prevent flash) -->
+    <script is:inline>
+      const theme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+    </script>
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <Header client:load />
+
+    <div class="garden-layout flex-1">
+      <!-- Left Sidebar -->
+      <aside class="garden-sidebar-left">
+        <LeftSidebar client:load />
+      </aside>
+
+      <!-- Main Content -->
+      <main class="garden-content">
+        <slot />
+      </main>
+
+      <!-- Right Panel (conditional) -->
+      {showRightPanel && (
+        <aside class="garden-sidebar-right">
+          <RightPanel
+            client:load
+            currentSlug={currentSlug}
+            showBacklinks={showBacklinks}
+            showMiniGraph={showMiniGraph}
+            showToc={showToc}
+            headings={headings}
+          />
+        </aside>
+      )}
+    </div>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  /* Digital Garden 3-column Layout */
+  .garden-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 0;
+    min-height: calc(100vh - 120px);
+  }
+
+  .garden-sidebar-left {
+    position: sticky;
+    top: 57px; /* Header height */
+    height: calc(100vh - 57px);
+    overflow-y: auto;
+    border-right: 1px solid var(--bg-tertiary);
+    background: var(--bg-secondary);
+  }
+
+  .garden-content {
+    min-width: 0;
+    padding: 2rem;
+  }
+
+  .garden-sidebar-right {
+    position: sticky;
+    top: 57px;
+    height: calc(100vh - 57px);
+    width: 300px;
+    overflow-y: auto;
+    border-left: 1px solid var(--bg-tertiary);
+    background: var(--bg-secondary);
+  }
+
+  /* With right sidebar */
+  .garden-layout:has(.garden-sidebar-right) {
+    grid-template-columns: 260px 1fr 300px;
+  }
+
+  /* Responsive */
+  @media (max-width: 1280px) {
+    .garden-layout {
+      grid-template-columns: 240px 1fr;
+    }
+
+    .garden-layout:has(.garden-sidebar-right) {
+      grid-template-columns: 240px 1fr 260px;
+    }
+
+    .garden-sidebar-right {
+      width: 260px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .garden-sidebar-right {
+      display: none;
+    }
+
+    .garden-layout,
+    .garden-layout:has(.garden-sidebar-right) {
+      grid-template-columns: 220px 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .garden-layout,
+    .garden-layout:has(.garden-sidebar-right) {
+      grid-template-columns: 1fr;
+    }
+
+    .garden-sidebar-left {
+      display: none;
+    }
+
+    .garden-content {
+      padding: 1rem;
+    }
+  }
+
+  /* Scrollbar styling for sidebars */
+  .garden-sidebar-left::-webkit-scrollbar,
+  .garden-sidebar-right::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .garden-sidebar-left::-webkit-scrollbar-thumb,
+  .garden-sidebar-right::-webkit-scrollbar-thumb {
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+  }
+</style>

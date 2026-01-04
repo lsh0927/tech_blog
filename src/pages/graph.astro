@@ -1,0 +1,280 @@
+---
+import DigitalGardenLayout from '../layouts/DigitalGardenLayout.astro';
+import GraphCanvas from '../components/Graph/GraphCanvas';
+---
+
+<DigitalGardenLayout
+  title="Knowledge Graph - Tech Notes"
+  showBacklinks={false}
+  showMiniGraph={false}
+  showToc={false}
+>
+  <div class="graph-page">
+    <header class="graph-header">
+      <div class="graph-header-content">
+        <h1 class="graph-title">Knowledge Graph</h1>
+        <p class="graph-description">
+          Explore connections between notes. Solid lines show explicit [[wiki-links]],
+          dashed lines show AI-suggested semantic connections.
+        </p>
+      </div>
+      <a href="/posts" class="list-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="8" y1="6" x2="21" y2="6" />
+          <line x1="8" y1="12" x2="21" y2="12" />
+          <line x1="8" y1="18" x2="21" y2="18" />
+          <line x1="3" y1="6" x2="3.01" y2="6" />
+          <line x1="3" y1="12" x2="3.01" y2="12" />
+          <line x1="3" y1="18" x2="3.01" y2="18" />
+        </svg>
+        View as list
+      </a>
+    </header>
+
+    <div class="graph-container">
+      <GraphCanvas client:load height={500} />
+    </div>
+
+    <div class="graph-legend">
+      <div class="legend-section">
+        <h3 class="legend-title">Connection Types</h3>
+        <div class="legend-items">
+          <div class="legend-item">
+            <span class="legend-line legend-explicit"></span>
+            <span class="legend-label">Explicit [[link]]</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-line legend-ai"></span>
+            <span class="legend-label">AI suggested</span>
+          </div>
+        </div>
+      </div>
+      <div class="legend-section">
+        <h3 class="legend-title">Interactions</h3>
+        <div class="legend-items">
+          <div class="legend-item">
+            <span class="legend-icon">🖱️</span>
+            <span class="legend-label">Click node to view</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-icon">🔍</span>
+            <span class="legend-label">Scroll to zoom</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-icon">✋</span>
+            <span class="legend-label">Drag to pan</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="graph-info">
+      <h3 class="info-title">How it works</h3>
+      <div class="info-content">
+        <div class="info-item">
+          <span class="info-number">1</span>
+          <span class="info-text">Notes are analyzed using AI embeddings to understand their semantic meaning</span>
+        </div>
+        <div class="info-item">
+          <span class="info-number">2</span>
+          <span class="info-text">Explicit [[wiki-links]] in your notes create direct connections</span>
+        </div>
+        <div class="info-item">
+          <span class="info-number">3</span>
+          <span class="info-text">AI suggests additional connections based on content similarity</span>
+        </div>
+        <div class="info-item">
+          <span class="info-number">4</span>
+          <span class="info-text">The graph visualizes both types of connections to help you explore ideas</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</DigitalGardenLayout>
+
+<style>
+  .graph-page {
+    max-width: 100%;
+  }
+
+  .graph-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--bg-tertiary);
+  }
+
+  .graph-header-content {
+    flex: 1;
+  }
+
+  .graph-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .graph-description {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .list-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--link);
+    text-decoration: none;
+    background: var(--bg-secondary);
+    border: 1px solid var(--bg-tertiary);
+    border-radius: 6px;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+  }
+
+  .list-link:hover {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+  }
+
+  .graph-container {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--bg-tertiary);
+    background: var(--bg-secondary);
+  }
+
+  .graph-legend {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--bg-tertiary);
+  }
+
+  .legend-section {
+    flex: 1;
+  }
+
+  .legend-title {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .legend-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  .legend-line {
+    display: inline-block;
+    width: 20px;
+    height: 2px;
+  }
+
+  .legend-explicit {
+    background: var(--accent-primary);
+  }
+
+  .legend-ai {
+    background: var(--graph-edge);
+    background-image: repeating-linear-gradient(
+      90deg,
+      var(--graph-edge) 0,
+      var(--graph-edge) 4px,
+      transparent 4px,
+      transparent 6px
+    );
+  }
+
+  .legend-icon {
+    font-size: 0.875rem;
+  }
+
+  .legend-label {
+    color: var(--text-secondary);
+  }
+
+  .graph-info {
+    margin-top: 1.5rem;
+    padding: 1.25rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--bg-tertiary);
+  }
+
+  .info-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+  }
+
+  .info-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .info-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: var(--accent-primary);
+    color: var(--bg-primary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .info-text {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  @media (max-width: 768px) {
+    .graph-header {
+      flex-direction: column;
+    }
+
+    .graph-legend {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .info-content {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

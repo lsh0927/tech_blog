@@ -1,0 +1,262 @@
+---
+import DigitalGardenLayout from '../../layouts/DigitalGardenLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('posts', ({ data }) => !data.draft);
+const sortedPosts = posts.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+// Get all unique tags
+const allTags = [...new Set(posts.flatMap((post) => post.data.tags))];
+---
+
+<DigitalGardenLayout
+  title="Posts - Tech Notes"
+  showBacklinks={false}
+  showMiniGraph={false}
+  showToc={false}
+>
+  <div class="posts-page">
+    <header class="posts-header">
+      <h1 class="posts-title">All Notes</h1>
+      <p class="posts-count">{posts.length} notes in this garden</p>
+    </header>
+
+    <!-- Tag Filter -->
+    {allTags.length > 0 && (
+      <div class="tag-filter">
+        <button class="filter-tag active-tag" data-tag="all">
+          All
+        </button>
+        {allTags.map((tag) => (
+          <button class="filter-tag" data-tag={tag}>
+            {tag}
+          </button>
+        ))}
+      </div>
+    )}
+
+    <!-- Posts Grid -->
+    <div class="posts-grid" id="posts-list">
+      {sortedPosts.map((post) => (
+        <article class="post-card" data-tags={post.data.tags.join(',')}>
+          <a href={`/posts/${post.slug}`} class="post-card-link">
+            <div class="post-card-header">
+              <h2 class="post-card-title">{post.data.title}</h2>
+              <time class="post-card-date" datetime={post.data.date.toISOString()}>
+                {new Date(post.data.date).toLocaleDateString('ko-KR', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                })}
+              </time>
+            </div>
+            {post.data.excerpt && (
+              <p class="post-card-excerpt">{post.data.excerpt}</p>
+            )}
+            {post.data.tags.length > 0 && (
+              <div class="post-card-tags">
+                {post.data.tags.map((tag: string) => (
+                  <span class="post-tag">{tag}</span>
+                ))}
+              </div>
+            )}
+          </a>
+        </article>
+      ))}
+    </div>
+
+    {posts.length === 0 && (
+      <div class="posts-empty">
+        <p>No notes yet.</p>
+        <p class="posts-empty-hint">
+          Create your first note in <code>src/content/posts/</code>
+        </p>
+      </div>
+    )}
+  </div>
+</DigitalGardenLayout>
+
+<style>
+  .posts-page {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .posts-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--bg-tertiary);
+  }
+
+  .posts-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .posts-count {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
+
+  .tag-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .filter-tag {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .filter-tag:hover {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+  }
+
+  .filter-tag.active-tag {
+    background: var(--accent-primary);
+    color: var(--bg-primary);
+  }
+
+  .posts-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .post-card {
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .post-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .post-card-link {
+    display: block;
+    padding: 1.25rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--bg-tertiary);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.15s ease;
+  }
+
+  .post-card-link:hover {
+    border-color: var(--accent-primary);
+  }
+
+  .post-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .post-card-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.3;
+    transition: color 0.15s ease;
+  }
+
+  .post-card-link:hover .post-card-title {
+    color: var(--accent-primary);
+  }
+
+  .post-card-date {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .post-card-excerpt {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .post-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+  }
+
+  .posts-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-muted);
+  }
+
+  .posts-empty-hint {
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+  }
+
+  .posts-empty-hint code {
+    background: var(--bg-tertiary);
+    padding: 0.125rem 0.375rem;
+    border-radius: 4px;
+    font-size: 0.8125rem;
+  }
+
+  @media (max-width: 768px) {
+    .post-card-header {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .post-card-date {
+      order: -1;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tagButtons = document.querySelectorAll('[data-tag]');
+    const postItems = document.querySelectorAll('.post-card');
+
+    tagButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const tag = button.getAttribute('data-tag');
+
+        // Update active state
+        tagButtons.forEach((btn) => btn.classList.remove('active-tag'));
+        button.classList.add('active-tag');
+
+        // Filter posts
+        postItems.forEach((item) => {
+          const itemTags = item.getAttribute('data-tags')?.split(',') || [];
+          if (tag === 'all' || itemTags.includes(tag || '')) {
+            (item as HTMLElement).style.display = 'block';
+          } else {
+            (item as HTMLElement).style.display = 'none';
+          }
+        });
+      });
+    });
+  });
+</script>

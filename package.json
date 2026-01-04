@@ -1,14 +1,39 @@
 {
-  "name": "blog",
+  "name": "tech-notes-blog",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "npm run sync:notion && npm run generate:embeddings && npm run build:links && npm run build:search && astro build",
+    "build:site": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "sync:notion": "tsx scripts/sync-notion.ts",
+    "generate:embeddings": "tsx scripts/generate-embeddings.ts",
+    "build:graph": "tsx scripts/build-graph.ts",
+    "build:links": "tsx scripts/build-links-data.ts",
+    "build:search": "tsx scripts/build-search-index.ts"
   },
   "dependencies": {
-    "astro": "^5.16.6"
+    "@astrojs/mdx": "^4.3.13",
+    "@astrojs/react": "^4.4.2",
+    "@notionhq/client": "^5.6.0",
+    "@tailwindcss/vite": "^4.1.18",
+    "@types/d3": "^7.4.3",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "astro": "^5.16.6",
+    "d3": "^7.9.0",
+    "dotenv": "^17.2.3",
+    "fuse.js": "^7.0.0",
+    "gray-matter": "^4.0.3",
+    "openai": "^6.15.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "reading-time": "^1.5.0",
+    "tailwindcss": "^4.1.18"
+  },
+  "devDependencies": {
+    "tsx": "^4.21.0"
   }
 }

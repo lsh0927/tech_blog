@@ -17,6 +17,9 @@ pnpm-debug.log*
 .env
 .env.production
 
+# Notion sync cache
+.notion-cache.json
+
 # macOS-specific files
 .DS_Store
 

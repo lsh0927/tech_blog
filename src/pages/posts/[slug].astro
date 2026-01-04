@@ -1,0 +1,208 @@
+---
+import DigitalGardenLayout from '../../layouts/DigitalGardenLayout.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await post.render();
+
+// Format headings for TOC
+const tocHeadings = headings.map((h) => ({
+  depth: h.depth,
+  text: h.text,
+  slug: h.slug,
+}));
+
+const formattedDate = new Date(post.data.date).toLocaleDateString('ko-KR', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<DigitalGardenLayout
+  title={`${post.data.title} - Tech Notes`}
+  description={post.data.excerpt}
+  image={post.data.image}
+  currentSlug={post.slug}
+  showBacklinks={true}
+  showMiniGraph={true}
+  showToc={true}
+  headings={tocHeadings}
+>
+  <article class="post-article">
+    <!-- Post Header -->
+    <header class="post-header">
+      <h1 class="post-title">{post.data.title}</h1>
+      <div class="post-meta">
+        <time datetime={post.data.date.toISOString()}>
+          {formattedDate}
+        </time>
+      </div>
+      {post.data.tags.length > 0 && (
+        <div class="post-tags">
+          {post.data.tags.map((tag: string) => (
+            <a href={`/tags/${tag}`} class="post-tag hover:scale-105">
+              {tag}
+            </a>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <!-- Post Content -->
+    <div class="post-content prose prose-invert max-w-none">
+      <Content />
+    </div>
+
+    <!-- Navigation -->
+    <nav class="post-nav">
+      <a href="/posts" class="post-nav-link">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        Back to all posts
+      </a>
+    </nav>
+  </article>
+</DigitalGardenLayout>
+
+<style>
+  .post-article {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .post-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--bg-tertiary);
+  }
+
+  .post-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .post-meta {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .post-content {
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  /* Prose styles for MDX content */
+  .prose h1 { margin-top: 2em; }
+  .prose h2 { margin-top: 1.5em; scroll-margin-top: 80px; }
+  .prose h3 { margin-top: 1.25em; scroll-margin-top: 80px; }
+
+  .prose ul,
+  .prose ol {
+    padding-left: 1.5em;
+    margin: 1em 0;
+  }
+
+  .prose li {
+    margin: 0.5em 0;
+    color: var(--text-secondary);
+  }
+
+  .prose ul li {
+    list-style-type: disc;
+  }
+
+  .prose ol li {
+    list-style-type: decimal;
+  }
+
+  .prose strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .prose img {
+    border-radius: 8px;
+    margin: 1.5em 0;
+  }
+
+  .prose hr {
+    border: none;
+    border-top: 1px solid var(--bg-tertiary);
+    margin: 2em 0;
+  }
+
+  .prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+  }
+
+  .prose th,
+  .prose td {
+    padding: 0.75em 1em;
+    border: 1px solid var(--bg-tertiary);
+    text-align: left;
+  }
+
+  .prose th {
+    background: var(--bg-secondary);
+    font-weight: 600;
+  }
+
+  .post-nav {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--bg-tertiary);
+  }
+
+  .post-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--link);
+    text-decoration: none;
+    font-size: 0.875rem;
+  }
+
+  .post-nav-link:hover {
+    text-decoration: underline;
+  }
+
+  /* Line clamp for related posts */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

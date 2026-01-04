@@ -1,0 +1,308 @@
+---
+import DigitalGardenLayout from '../layouts/DigitalGardenLayout.astro';
+---
+
+<DigitalGardenLayout
+  title="About - Tech Notes"
+  showBacklinks={false}
+  showMiniGraph={false}
+  showToc={false}
+>
+  <div class="about-page">
+    <header class="about-header">
+      <h1 class="about-title">About This Garden</h1>
+    </header>
+
+    <div class="about-content">
+      <section class="about-section">
+        <p class="intro-text">
+          안녕하세요, 상상을 현실로 바꾸는 개발자 이승헌입니다.
+        </p>
+        <p class="description">
+          이 디지털 가든은 기술 노트와 학습 내용을 기록하고 공유하는 공간입니다.
+          AI 기반 지식 그래프와 wiki-style 링크를 통해 노트 간의 연결을 시각화하여
+          관련 주제를 쉽게 탐색할 수 있습니다.
+        </p>
+      </section>
+
+      <section class="about-section">
+        <h2 class="section-title">Digital Garden Philosophy</h2>
+        <div class="philosophy-grid">
+          <div class="philosophy-item">
+            <span class="philosophy-icon">🌱</span>
+            <h3 class="philosophy-title">Growing Ideas</h3>
+            <p class="philosophy-text">
+              Notes evolve over time. Unlike traditional blogs, ideas here are
+              continuously refined and expanded.
+            </p>
+          </div>
+          <div class="philosophy-item">
+            <span class="philosophy-icon">🔗</span>
+            <h3 class="philosophy-title">Connected Thoughts</h3>
+            <p class="philosophy-text">
+              Notes link to each other using [[wiki-links]], creating a web of
+              interconnected ideas rather than isolated posts.
+            </p>
+          </div>
+          <div class="philosophy-item">
+            <span class="philosophy-icon">🤖</span>
+            <h3 class="philosophy-title">AI-Enhanced</h3>
+            <p class="philosophy-text">
+              AI suggests related notes based on semantic similarity, helping
+              discover connections you might have missed.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="about-section">
+        <h2 class="section-title">Tech Stack</h2>
+        <div class="tech-grid">
+          <div class="tech-item">
+            <span class="tech-category">Framework</span>
+            <span class="tech-value">Astro 5 + React</span>
+          </div>
+          <div class="tech-item">
+            <span class="tech-category">Styling</span>
+            <span class="tech-value">Tailwind CSS</span>
+          </div>
+          <div class="tech-item">
+            <span class="tech-category">AI</span>
+            <span class="tech-value">OpenAI Embeddings</span>
+          </div>
+          <div class="tech-item">
+            <span class="tech-category">Graph</span>
+            <span class="tech-value">D3.js</span>
+          </div>
+          <div class="tech-item">
+            <span class="tech-category">Search</span>
+            <span class="tech-value">Fuse.js</span>
+          </div>
+          <div class="tech-item">
+            <span class="tech-category">Hosting</span>
+            <span class="tech-value">Cloudflare Pages</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="about-section">
+        <h2 class="section-title">How It Works</h2>
+        <div class="how-it-works">
+          <div class="step">
+            <span class="step-number">1</span>
+            <div class="step-content">
+              <h3 class="step-title">Write with Wiki Links</h3>
+              <p class="step-text">
+                Notes are written in MDX with [[wiki-link]] syntax to connect related ideas.
+              </p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">2</span>
+            <div class="step-content">
+              <h3 class="step-title">Generate Embeddings</h3>
+              <p class="step-text">
+                Each note is converted to a vector using OpenAI's text-embedding-3-small model.
+              </p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">3</span>
+            <div class="step-content">
+              <h3 class="step-title">Calculate Similarity</h3>
+              <p class="step-text">
+                Cosine similarity is calculated between all note pairs to find related content.
+              </p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">4</span>
+            <div class="step-content">
+              <h3 class="step-title">Visualize Connections</h3>
+              <p class="step-text">
+                The knowledge graph displays both explicit links and AI-suggested connections.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="about-section">
+        <h2 class="section-title">Contact</h2>
+        <p class="contact-text">
+          질문이나 피드백이 있으시면 GitHub를 통해 연락해주세요.
+        </p>
+      </section>
+    </div>
+  </div>
+</DigitalGardenLayout>
+
+<style>
+  .about-page {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .about-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--bg-tertiary);
+  }
+
+  .about-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+  }
+
+  .about-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .about-section {
+  }
+
+  .intro-text {
+    font-size: 1.125rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .description {
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+  }
+
+  /* Philosophy Grid */
+  .philosophy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+
+  .philosophy-item {
+    padding: 1.25rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--bg-tertiary);
+    border-radius: 8px;
+  }
+
+  .philosophy-icon {
+    display: block;
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .philosophy-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .philosophy-text {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* Tech Grid */
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .tech-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--bg-tertiary);
+    border-radius: 6px;
+  }
+
+  .tech-category {
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+  }
+
+  .tech-value {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  /* How It Works */
+  .how-it-works {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .step {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--bg-tertiary);
+    border-radius: 8px;
+  }
+
+  .step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    background: var(--accent-primary);
+    color: var(--bg-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .step-content {
+    flex: 1;
+  }
+
+  .step-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .step-text {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* Contact */
+  .contact-text {
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 640px) {
+    .philosophy-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
