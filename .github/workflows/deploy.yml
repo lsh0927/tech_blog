@@ -45,6 +45,10 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         continue-on-error: true
 
+      - name: Build links data
+        run: npx tsx scripts/build-links-data.ts
+        continue-on-error: true
+
       - name: Build graph data
         run: npx tsx scripts/build-graph.ts
         continue-on-error: true
