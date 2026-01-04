@@ -43,9 +43,9 @@ export default function Header() {
         isScrolled ? 'py-3' : 'py-4'
       }`}
     >
-      <div className="container-wide">
-        <nav className="flex items-center justify-between">
-          {/* Logo */}
+      <nav className="header-grid">
+        {/* Logo - aligned with left sidebar */}
+        <div className="header-logo-area">
           <a
             href="/"
             className="text-xl font-semibold tracking-tight hover:opacity-80 transition-opacity"
@@ -71,8 +71,10 @@ export default function Header() {
               Tech Notes
             </span>
           </a>
+        </div>
 
-          {/* Navigation Links */}
+        {/* Navigation Links - in main content area */}
+        <div className="header-nav-area">
           <div className="flex items-center gap-1">
             {navItems.map((item) => (
               <a key={item.href} href={item.href} className="nav-link">
@@ -123,8 +125,8 @@ export default function Header() {
               )}
             </button>
           </div>
-        </nav>
-      </div>
+        </div>
+      </nav>
     </header>
   );
 }

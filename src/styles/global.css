@@ -333,6 +333,50 @@ blockquote {
   border-bottom: 1px solid var(--bg-tertiary);
 }
 
+/* Header Grid - aligned with sidebar layout */
+.header-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  align-items: center;
+}
+
+.header-logo-area {
+  padding: 0 1rem;
+  border-right: 1px solid var(--bg-tertiary);
+}
+
+.header-nav-area {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 2rem;
+}
+
+@media (max-width: 1280px) {
+  .header-grid {
+    grid-template-columns: 240px 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .header-grid {
+    grid-template-columns: 220px 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-grid {
+    grid-template-columns: 1fr auto;
+  }
+
+  .header-logo-area {
+    border-right: none;
+  }
+
+  .header-nav-area {
+    padding: 0 1rem;
+  }
+}
+
 .nav-link {
   color: var(--text-secondary);
   font-size: 0.875rem;
