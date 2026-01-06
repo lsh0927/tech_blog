@@ -1,54 +1,260 @@
 {
   "nodes": [
     {
-      "id": "hello-world",
-      "title": "Hello World - 첫 번째 포스트",
+      "id": "16-개발-설정",
+      "title": "1/6 개발 설정",
       "tags": [
-        "Welcome",
-        "Blog",
+        "AI",
+        "Agent",
+        "Service"
+      ],
+      "group": 0,
+      "connections": 3
+    },
+    {
+      "id": "16-개발-진행-상황",
+      "title": "1/6 개발 진행 상황",
+      "tags": [
+        "Service"
+      ],
+      "group": 1,
+      "connections": 2
+    },
+    {
+      "id": "ai-agent란",
+      "title": "AI Agent란?",
+      "tags": [
         "AI"
       ],
       "group": 0,
+      "connections": 2
+    },
+    {
+      "id": "aws-강의실-용어정리",
+      "title": "Aws 강의실 용어정리",
+      "tags": [
+        "DevOps"
+      ],
+      "group": 2,
+      "connections": 1
+    },
+    {
+      "id": "aws의-구조",
+      "title": "AWS의 구조",
+      "tags": [
+        "DevOps"
+      ],
+      "group": 2,
+      "connections": 1
+    },
+    {
+      "id": "prd-작성요령",
+      "title": "PRD 작성요령",
+      "tags": [
+        "PRD"
+      ],
+      "group": 3,
       "connections": 0
     },
     {
-      "id": "테스트-포스팅",
-      "title": "테스트 포스팅",
+      "id": "주식-거래-자동화-agent",
+      "title": "주식 거래 자동화 Agent",
       "tags": [
-        "test"
+        "AI",
+        "Agent",
+        "Service"
       ],
-      "group": 1,
-      "connections": 0
+      "group": 0,
+      "connections": 3
     }
   ],
-  "edges": [],
+  "edges": [
+    {
+      "source": "16-개발-설정",
+      "target": "주식-거래-자동화-agent",
+      "weight": 1,
+      "type": "ai"
+    },
+    {
+      "source": "16-개발-설정",
+      "target": "16-개발-진행-상황",
+      "weight": 0.33,
+      "type": "ai"
+    },
+    {
+      "source": "16-개발-설정",
+      "target": "ai-agent란",
+      "weight": 0.33,
+      "type": "ai"
+    },
+    {
+      "source": "16-개발-진행-상황",
+      "target": "주식-거래-자동화-agent",
+      "weight": 0.33,
+      "type": "ai"
+    },
+    {
+      "source": "ai-agent란",
+      "target": "주식-거래-자동화-agent",
+      "weight": 0.33,
+      "type": "ai"
+    },
+    {
+      "source": "aws-강의실-용어정리",
+      "target": "aws의-구조",
+      "weight": 1,
+      "type": "ai"
+    }
+  ],
   "backlinks": {
-    "hello-world": {
+    "16-개발-설정": {
+      "explicit": [],
+      "aiSuggested": [
+        {
+          "slug": "주식-거래-자동화-agent",
+          "title": "주식 거래 자동화 Agent",
+          "score": 1
+        },
+        {
+          "slug": "16-개발-진행-상황",
+          "title": "1/6 개발 진행 상황",
+          "score": 0.33
+        },
+        {
+          "slug": "ai-agent란",
+          "title": "AI Agent란?",
+          "score": 0.33
+        }
+      ]
+    },
+    "16-개발-진행-상황": {
+      "explicit": [],
+      "aiSuggested": [
+        {
+          "slug": "16-개발-설정",
+          "title": "1/6 개발 설정",
+          "score": 0.33
+        },
+        {
+          "slug": "주식-거래-자동화-agent",
+          "title": "주식 거래 자동화 Agent",
+          "score": 0.33
+        }
+      ]
+    },
+    "ai-agent란": {
+      "explicit": [],
+      "aiSuggested": [
+        {
+          "slug": "16-개발-설정",
+          "title": "1/6 개발 설정",
+          "score": 0.33
+        },
+        {
+          "slug": "주식-거래-자동화-agent",
+          "title": "주식 거래 자동화 Agent",
+          "score": 0.33
+        }
+      ]
+    },
+    "aws-강의실-용어정리": {
+      "explicit": [],
+      "aiSuggested": [
+        {
+          "slug": "aws의-구조",
+          "title": "AWS의 구조",
+          "score": 1
+        }
+      ]
+    },
+    "aws의-구조": {
+      "explicit": [],
+      "aiSuggested": [
+        {
+          "slug": "aws-강의실-용어정리",
+          "title": "Aws 강의실 용어정리",
+          "score": 1
+        }
+      ]
+    },
+    "prd-작성요령": {
       "explicit": [],
       "aiSuggested": []
     },
-    "테스트-포스팅": {
+    "주식-거래-자동화-agent": {
       "explicit": [],
-      "aiSuggested": []
+      "aiSuggested": [
+        {
+          "slug": "16-개발-설정",
+          "title": "1/6 개발 설정",
+          "score": 1
+        },
+        {
+          "slug": "16-개발-진행-상황",
+          "title": "1/6 개발 진행 상황",
+          "score": 0.33
+        },
+        {
+          "slug": "ai-agent란",
+          "title": "AI Agent란?",
+          "score": 0.33
+        }
+      ]
     }
   },
   "postMeta": {
-    "hello-world": {
-      "title": "Hello World - 첫 번째 포스트",
+    "16-개발-설정": {
+      "title": "1/6 개발 설정",
       "tags": [
-        "Welcome",
-        "Blog",
+        "AI",
+        "Agent",
+        "Service"
+      ],
+      "excerpt": "한국투자증권 Open API 이용"
+    },
+    "16-개발-진행-상황": {
+      "title": "1/6 개발 진행 상황",
+      "tags": [
+        "Service"
+      ]
+    },
+    "ai-agent란": {
+      "title": "AI Agent란?",
+      "tags": [
         "AI"
       ],
-      "excerpt": "AI 기반 지식 그래프 블로그에 오신 것을 환영합니다. 이 블로그는 포스트 간의 연결을 시각화합니다."
+      "excerpt": "AI 개발자의 역량"
     },
-    "테스트-포스팅": {
-      "title": "테스트 포스팅",
+    "aws-강의실-용어정리": {
+      "title": "Aws 강의실 용어정리",
       "tags": [
-        "test"
+        "DevOps"
       ],
-      "excerpt": "여러 기능 테스트"
+      "excerpt": "가상화"
+    },
+    "aws의-구조": {
+      "title": "AWS의 구조",
+      "tags": [
+        "DevOps"
+      ],
+      "excerpt": "AWS"
+    },
+    "prd-작성요령": {
+      "title": "PRD 작성요령",
+      "tags": [
+        "PRD"
+      ],
+      "excerpt": "AI 활용능력"
+    },
+    "주식-거래-자동화-agent": {
+      "title": "주식 거래 자동화 Agent",
+      "tags": [
+        "AI",
+        "Agent",
+        "Service"
+      ],
+      "excerpt": "서비스개발"
     }
   },
-  "generatedAt": "2026-01-04T01:43:52.165Z"
+  "generatedAt": "2026-01-06T14:14:07.698Z"
 }

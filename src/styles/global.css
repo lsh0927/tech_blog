@@ -142,9 +142,27 @@ pre code {
 blockquote {
   border-left: 3px solid var(--accent-primary);
   padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
   margin: 1.5em 0;
   color: var(--text-secondary);
-  font-style: italic;
+  background: var(--bg-secondary);
+  border-radius: 0 8px 8px 0;
+}
+
+blockquote p {
+  margin-bottom: 0.5em;
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* Callout 스타일 (Notion 스타일) */
+blockquote strong:first-child {
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 /* ===========================================

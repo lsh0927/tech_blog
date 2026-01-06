@@ -77,6 +77,7 @@ const EMBEDDINGS_FILE = path.join(process.cwd(), 'public/embeddings.json');
 const LINKS_FILE = path.join(process.cwd(), 'public/links-data.json');
 const SIMILARITY_THRESHOLD = 0.65;
 const MAX_AI_SUGGESTIONS = 5;
+const MAX_TAG_SUGGESTIONS = 5;
 
 // Wiki link regex: [[page-name]] or [[page-name|display text]]
 const WIKI_LINK_REGEX = /\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g;
@@ -109,14 +110,14 @@ function readPosts(): PostData[] {
     return posts;
   }
 
-  const files = fs.readdirSync(POSTS_DIR).filter((f) => f.endsWith('.mdx'));
+  const files = fs.readdirSync(POSTS_DIR).filter((f) => f.endsWith('.md') || f.endsWith('.mdx'));
 
   for (const file of files) {
     const filePath = path.join(POSTS_DIR, file);
     const fileContent = fs.readFileSync(filePath, 'utf-8');
     const { data, content } = matter(fileContent);
 
-    const slug = file.replace('.mdx', '');
+    const slug = file.replace(/\.mdx?$/, '');
     const explicitLinks = parseWikiLinks(content);
 
     posts.push({
@@ -187,6 +188,41 @@ function getAISuggestions(
 }
 
 /**
+ * Get tag-based similar posts (fallback when no embeddings)
+ */
+function getTagBasedSuggestions(
+  currentPost: PostData,
+  allPosts: PostData[],
+  explicitLinks: string[]
+): LinkEntry[] {
+  if (currentPost.tags.length === 0) return [];
+
+  const suggestions: { slug: string; title: string; score: number }[] = [];
+
+  for (const other of allPosts) {
+    if (other.slug === currentPost.slug) continue;
+    if (explicitLinks.includes(other.slug)) continue;
+
+    // Calculate tag overlap score
+    const commonTags = currentPost.tags.filter(tag => other.tags.includes(tag));
+    if (commonTags.length === 0) continue;
+
+    // Score: common tags / max possible tags
+    const score = commonTags.length / Math.max(currentPost.tags.length, other.tags.length);
+
+    suggestions.push({
+      slug: other.slug,
+      title: other.title,
+      score: Math.round(score * 100) / 100,
+    });
+  }
+
+  return suggestions
+    .sort((a, b) => b.score - a.score)
+    .slice(0, MAX_TAG_SUGGESTIONS);
+}
+
+/**
  * Assign group based on primary tag
  */
 function assignGroup(tags: string[], tagGroups: Map<string, number>): number {
@@ -249,14 +285,24 @@ async function main() {
   }
   console.log(`   Found ${explicitLinkCount} explicit links`);
 
-  // Process AI suggestions
-  console.log('🤖 Processing AI suggestions...');
-  const aiSuggestionsMap = new Map<string, LinkEntry[]>();
-  let aiLinkCount = 0;
+  // Process suggestions (AI if available, otherwise tag-based)
+  const hasEmbeddings = embeddings.length > 0;
+  console.log(hasEmbeddings ? '🤖 Processing AI suggestions...' : '🏷️  Processing tag-based suggestions...');
+  const suggestionsMap = new Map<string, LinkEntry[]>();
+  let suggestionLinkCount = 0;
 
   for (const post of posts) {
-    const suggestions = getAISuggestions(post.slug, embeddings, post.explicitLinks);
-    aiSuggestionsMap.set(post.slug, suggestions);
+    // Try AI suggestions first, fallback to tag-based
+    let suggestions = hasEmbeddings
+      ? getAISuggestions(post.slug, embeddings, post.explicitLinks)
+      : [];
+
+    // If no AI suggestions, use tag-based
+    if (suggestions.length === 0) {
+      suggestions = getTagBasedSuggestions(post, posts, post.explicitLinks);
+    }
+
+    suggestionsMap.set(post.slug, suggestions);
 
     for (const suggestion of suggestions) {
       // Avoid duplicate edges (check both directions)
@@ -271,18 +317,18 @@ async function main() {
           source: post.slug,
           target: suggestion.slug,
           weight: suggestion.score!,
-          type: 'ai',
+          type: hasEmbeddings ? 'ai' : 'ai', // Keep as 'ai' type for display
         });
         connectionCount.set(post.slug, (connectionCount.get(post.slug) || 0) + 1);
         connectionCount.set(
           suggestion.slug,
           (connectionCount.get(suggestion.slug) || 0) + 1
         );
-        aiLinkCount++;
+        suggestionLinkCount++;
       }
     }
   }
-  console.log(`   Generated ${aiLinkCount} AI-suggested links`);
+  console.log(`   Generated ${suggestionLinkCount} suggested links`);
 
   // Build backlinks
   console.log('\n📎 Building backlinks...');
@@ -291,7 +337,7 @@ async function main() {
   for (const post of posts) {
     backlinks[post.slug] = {
       explicit: [],
-      aiSuggested: aiSuggestionsMap.get(post.slug) || [],
+      aiSuggested: suggestionsMap.get(post.slug) || [],
     };
   }
 
