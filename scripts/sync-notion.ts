@@ -361,7 +361,7 @@ async function syncNotionPosts(): Promise<void> {
 
     // 캐시 확인 (변경되지 않은 포스트 스킵)
     if (cache[page.id]?.lastEditedTime === lastEditedTime && cache[page.id]?.slug === slug) {
-      const filePath = path.join(POSTS_DIR, `${slug}.mdx`);
+      const filePath = path.join(POSTS_DIR, `${slug}.md`);
       if (fs.existsSync(filePath)) {
         newCache[page.id] = cache[page.id];
         skippedCount++;
@@ -380,16 +380,16 @@ async function syncNotionPosts(): Promise<void> {
       content += await blockToMarkdown(block);
     }
 
-    // MDX 파일 생성
-    const mdxContent = createMdxContent(title, date, tags, excerpt, content.trim());
-    const filePath = path.join(POSTS_DIR, `${slug}.mdx`);
+    // Markdown 파일 생성
+    const mdContent = createMdxContent(title, date, tags, excerpt, content.trim());
+    const filePath = path.join(POSTS_DIR, `${slug}.md`);
 
-    fs.writeFileSync(filePath, mdxContent, 'utf-8');
+    fs.writeFileSync(filePath, mdContent, 'utf-8');
 
     // 캐시 업데이트
     newCache[page.id] = { lastEditedTime, slug };
     syncedCount++;
-    console.log(`✅ Synced: ${title} → ${slug}.mdx`);
+    console.log(`✅ Synced: ${title} → ${slug}.md`);
   }
 
   // 캐시 저장
