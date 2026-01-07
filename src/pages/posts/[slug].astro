@@ -121,28 +121,63 @@ const formattedDate = new Date(post.data.date).toLocaleDateString('ko-KR', {
     line-height: 1.8;
   }
 
-  /* Prose styles for MDX content */
+  /* Prose styles for content */
   .prose h1 { margin-top: 2em; }
   .prose h2 { margin-top: 1.5em; scroll-margin-top: 80px; }
   .prose h3 { margin-top: 1.25em; scroll-margin-top: 80px; }
 
-  .prose ul,
-  .prose ol {
-    padding-left: 1.5em;
-    margin: 1em 0;
+  /* List Reset - Override Tailwind with high specificity */
+  .post-content.prose ul,
+  .post-content.prose ol {
+    list-style-position: outside !important;
+    padding-left: 1.25em !important;
+    margin: 0.5em 0 !important;
   }
 
-  .prose li {
-    margin: 0.5em 0;
+  .post-content.prose ul {
+    list-style-type: disc !important;
+  }
+
+  .post-content.prose ol {
+    list-style-type: decimal !important;
+  }
+
+  /* Nested lists - indented */
+  .post-content.prose ul ul,
+  .post-content.prose ol ol,
+  .post-content.prose ul ol,
+  .post-content.prose ol ul {
+    padding-left: 1.5em !important;
+    margin: 0.25em 0 !important;
+  }
+
+  .post-content.prose ul ul {
+    list-style-type: circle !important;
+  }
+
+  .post-content.prose ul ul ul {
+    list-style-type: square !important;
+  }
+
+  .post-content.prose li {
+    display: list-item !important;
+    margin: 0.375em 0 !important;
+    padding-left: 0.25em !important;
     color: var(--text-secondary);
+    line-height: 1.75;
   }
 
-  .prose ul li {
-    list-style-type: disc;
+  .post-content.prose li::marker {
+    color: var(--text-muted);
   }
 
-  .prose ol li {
-    list-style-type: decimal;
+  /* Ensure list items show bullets */
+  .post-content.prose ul > li {
+    list-style-type: disc !important;
+  }
+
+  .post-content.prose ul > li > ul > li {
+    list-style-type: circle !important;
   }
 
   .prose strong {
@@ -150,22 +185,68 @@ const formattedDate = new Date(post.data.date).toLocaleDateString('ko-KR', {
     font-weight: 600;
   }
 
-  .prose blockquote {
-    border-left: 3px solid var(--accent-primary);
-    padding: 0.75rem 1rem;
-    margin: 1.5em 0;
-    color: var(--text-secondary);
+  /* Callout / Blockquote styling - High specificity override */
+  .post-content.prose blockquote {
+    border-left: 4px solid #f59e0b !important;
+    padding: 1rem 1.25rem !important;
+    margin: 1.25em 0 !important;
+    color: var(--text-primary) !important;
+    background: rgba(245, 158, 11, 0.08) !important;
+    border-radius: 0 8px 8px 0 !important;
+    font-style: normal !important;
+    font-size: 0.9375rem !important;
+    line-height: 1.7 !important;
+  }
+
+  .post-content.prose blockquote p {
+    margin-bottom: 0.5em !important;
+    color: var(--text-secondary) !important;
+  }
+
+  .post-content.prose blockquote p:first-child {
+    color: var(--text-primary) !important;
+    font-weight: 500 !important;
+  }
+
+  .post-content.prose blockquote p:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  .post-content.prose blockquote strong {
+    color: #f59e0b !important;
+    font-weight: 600 !important;
+  }
+
+  .post-content.prose blockquote code {
+    background: rgba(245, 158, 11, 0.15) !important;
+    color: #fbbf24 !important;
+  }
+
+  /* Code blocks */
+  .prose pre {
     background: var(--bg-secondary);
-    border-radius: 0 8px 8px 0;
-    font-style: normal;
+    border: 1px solid var(--bg-tertiary);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin: 1.5em 0;
+    overflow-x: auto;
+    font-size: 0.875rem;
+    line-height: 1.7;
   }
 
-  .prose blockquote p {
-    margin-bottom: 0.5em;
+  .prose code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    background: var(--bg-tertiary);
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    color: var(--accent-primary);
   }
 
-  .prose blockquote p:last-child {
-    margin-bottom: 0;
+  .prose pre code {
+    background: none;
+    padding: 0;
+    color: var(--text-primary);
   }
 
   .prose img {

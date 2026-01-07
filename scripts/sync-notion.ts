@@ -130,13 +130,19 @@ async function blockToMarkdown(block: BlockObjectResponse, depth = 0): Promise<s
     case 'callout':
       const icon = block.callout.icon?.type === 'emoji' ? block.callout.icon.emoji : '💡';
       const calloutText = richTextToString(block.callout.rich_text);
-      // 멀티라인 callout 지원
-      const calloutLines = calloutText.split('\n');
-      if (calloutLines.length === 1) {
-        return `> ${icon} **${calloutText}**\n\n`;
+      let calloutContent = `> ${icon} ${calloutText ? `**${calloutText}**` : ''}\n`;
+
+      // callout 내부 children 처리 (bullet list 등)
+      if (block.has_children) {
+        const calloutChildren = await getBlockChildren(block.id);
+        for (const child of calloutChildren) {
+          const childMd = await blockToMarkdown(child, 0);
+          // 각 줄을 blockquote로 변환
+          const quotedLines = childMd.split('\n').map(line => line ? `> ${line}` : '>').join('\n');
+          calloutContent += quotedLines + '\n';
+        }
       }
-      // 여러 줄인 경우 첫 줄은 아이콘과 함께, 나머지는 인용구로
-      return `> ${icon} **${calloutLines[0]}**\n>\n${calloutLines.slice(1).map(line => `> ${line}`).join('\n')}\n\n`;
+      return calloutContent + '\n';
 
     case 'divider':
       return '---\n\n';

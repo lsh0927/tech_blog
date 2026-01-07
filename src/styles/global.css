@@ -1,6 +1,44 @@
 @import "tailwindcss";
 
 /* ===========================================
+   Tailwind Preflight Override - List Styles
+   =========================================== */
+
+/* List styles - Override Tailwind Preflight */
+ul, ol {
+  list-style: revert;
+  padding-left: 1.25em;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+ol {
+  list-style-type: decimal;
+}
+
+li {
+  display: list-item;
+}
+
+/* Nested list styles */
+ul ul, ol ul {
+  list-style-type: circle;
+  padding-left: 1.5em;
+  margin: 0.25em 0;
+}
+
+ul ul ul, ol ul ul {
+  list-style-type: square;
+}
+
+ol ol, ul ol {
+  padding-left: 1.5em;
+  margin: 0.25em 0;
+}
+
+/* ===========================================
    Design System - Claude-inspired Dark Theme
    =========================================== */
 
@@ -139,30 +177,39 @@ pre code {
   padding: 0;
 }
 
+/* Notion-style Callout/Blockquote */
 blockquote {
-  border-left: 3px solid var(--accent-primary);
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+  border-left: 4px solid #f59e0b;
+  padding: 1rem 1.25rem;
   margin: 1.5em 0;
-  color: var(--text-secondary);
-  background: var(--bg-secondary);
+  color: var(--text-primary);
+  background: rgba(245, 158, 11, 0.15);
   border-radius: 0 8px 8px 0;
+  font-style: normal;
 }
 
 blockquote p {
   margin-bottom: 0.5em;
+  color: var(--text-secondary);
+}
+
+blockquote p:first-child {
+  color: var(--text-primary);
+  font-weight: 500;
 }
 
 blockquote p:last-child {
   margin-bottom: 0;
 }
 
-/* Callout 스타일 (Notion 스타일) */
-blockquote strong:first-child {
-  color: var(--text-primary);
+blockquote strong {
+  color: #f59e0b;
   font-weight: 600;
+}
+
+blockquote code {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
 }
 
 /* ===========================================
